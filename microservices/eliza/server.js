@@ -56,7 +56,8 @@ app.get('/v1/conversations/:conversationID/messages', (req,res) => {
 app.post('/v1/conversations/:conversationID/messages', (req,res) => {
     // Create a new message
     let id = req.params.conversationID;
-    let body = JSON.parse(req.body);
+    let body = JSON.parse(JSON.stringify(req.body));
+    console.log(body);
     let msg = body.message;
     if (eliza.hasInstance(id)) {
         eliza.sendMessage(id,msg);
