@@ -78,6 +78,7 @@ app.ws('/', (ws, req) => {
     return response;
   }
 
+app.use('/available', require('./controllers/available'));
 app.get('/*', (req,res)=>{
     res.render('chat');
 });
