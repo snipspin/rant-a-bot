@@ -19,3 +19,40 @@ body {
     max-height: 70vh;
     overflow-y: scroll;
   }
+
+/* Source for speech-bubble with pointer https://leaverou.github.io/bubbly/ */
+  .speech-bubble {
+	position: relative;
+	background: #f3e5f5;
+    border-radius: .4em;
+    margin: 1vw;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-top-color: #f3e5f5;
+	border-bottom: 0;
+	margin-left: -10px;
+    margin-bottom: -20px;
+}
+
+.speech-bubble.right {
+background-color: #673ab7;
+color: #f3e5f5;
+}
+
+.speech-bubble.left:after {
+    border-left: 0;
+}
+
+.speech-bubble.right:after {
+    border-right: 0;
+    border-top-color: #673ab7;
+    /* border-color: #ea80fc; */
+}
