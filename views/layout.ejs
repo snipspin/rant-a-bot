@@ -9,15 +9,32 @@
     <title>Rant-a-bot</title>
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo left">-</a>
-          <ul id="nav-mobile" class="right">
-            <li><a class="waves-effect waves-light btn">Button</a></li>
-          </ul>
-        </div>
-      </nav>
-    <%- body %>
-    <script src="/js/materialize.min.js" type="text/javascript"></script>
+  <header>
+    <nav class="row deep-purple darken-3">
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo left"><i class="material-icons">home</i>rant-a-bot</a>
+        <ul id="nav-mobile" class="right">
+          <li><a class="waves-effect waves-light btn">Sign up</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+    <div class="section">
+      <%- body %>
+    </div>
+    </div>
+
+  </main>
+  <footer class="page-footer deep-purple">
+    <div class="footer-copyright">
+      <div class="container">
+      © 2020 rant-a-bot
+      <a class="grey-text text-lighten-4 right" href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/materialize.min.js" type="text/javascript"></script>
 </body>
 </html>

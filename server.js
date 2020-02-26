@@ -79,8 +79,10 @@ app.ws('/', (ws, req) => {
   }
 
 app.use('/available', require('./controllers/available'));
+app.use('/chat', require('./controllers/chat'));
+app.use('/', require('./controllers/home'));
 app.get('/*', (req,res)=>{
-    res.render('chat');
+    res.render('404');
 });
 
 app.listen((process.env.RANT_A_BOT_SERVER_PORT || 3000), ()=> console.log(`Rant-a-bot 🎧 on port ${(process.env.RANT_A_BOT_SERVER_PORT || 3000)}`));
