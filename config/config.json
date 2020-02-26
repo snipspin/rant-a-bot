@@ -1,0 +1,20 @@
+{
+  "development": {
+    "database": "rant_a_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "database": "rant_a_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "production": {
+    "database": "rant_a_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
+}
