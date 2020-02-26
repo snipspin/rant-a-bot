@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.19.2",
+    "cloudinary": "^1.19.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "elizabot": "0.0.2",
