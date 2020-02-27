@@ -56,3 +56,8 @@ color: #f3e5f5;
     border-top-color: #673ab7;
     /* border-color: #ea80fc; */
 }
+
+.cell {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -24,10 +24,8 @@
     addMessageToView = function(text, isServer = false) {
       
       let div = document.createElement('div');
-      // div.className = "bubble right-align";
       div.className = (isServer)? 'speech-bubble left left-align col s7' : 'speech-bubble right right-align col s7 offset-s5';
       div.textContent = text;
-      console.log(div);
       messageList.appendChild(div);
       messageList.scrollTop = messageList.scrollHeight;
     }
