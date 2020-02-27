@@ -1,8 +1,7 @@
-var modals = document.querySelectorAll('.modal')
-for (var i = 0; i < modals.length; i++){
-	M.Modal.init(modals[i]);
-}
 document.addEventListener('DOMContentLoaded', ()=>{
-
+    var elems = document.querySelectorAll('.collapsible');
+    var modals = document.querySelectorAll('.modal');
+    M.Collapsible.init(elems, 'accordion');
+    M.Modal.init(modals);
 });
 

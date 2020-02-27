@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/:name', (req,res) => {
+router.get('/:name', (req, res) => {
     console.log(`Someone wants to talk with ${req.params.name}`);
     // check if name exists
 
@@ -9,7 +9,7 @@ router.get('/:name', (req,res) => {
     res.render('chat');
 });
 
-router.get('/*', (req,res) => {
+router.get('/*', (req, res) => {
     res.render('chat');
 });
 
