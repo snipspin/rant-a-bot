@@ -109,22 +109,6 @@ async function getNewUserName() {
     return response;
 };
 
-// async function getNewUserImage(newUserName) {
-//     // const response = await axios.get(`${process.env.GAN_IMAGE_URL}`);
-//     // return response.data[0];
-//     const response = cloudinary.v2.uploader.upload(process.env.GAN_IMAGE_URL, 
-//         { folder: "GAN/", 
-//         public_id: newUserName },
-//   function(error, result) {
-//       console.log(result, error); 
-//       console.log('getNewUserImage');
-//       console.log(response);
-//       console.log(response.data);
-//       return response.data;
-//     });
-  
-// };
-
 function getNewUserImage(newUserName) {
     return new Promise((resolve, reject) => {
       cloudinary.v2.uploader.upload(process.env.GAN_IMAGE_URL,{ folder: "GAN/", 
