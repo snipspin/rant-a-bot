@@ -3,6 +3,7 @@ const cloudinary = require('cloudinary');
 const express = require('express');
 const app = express();
 const axios = require('axios');
+const db = require('../../models');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,16 +23,56 @@ app.post('/create', (req,res) => {
     createNewBotUser();
 });
 
+app.post('/create/bulk/:amount', (req,res) => {
+    // send status code 200 
+    res.status(200).send();
+    let amount = req.params.amount;
+    if (amount > 0 && !isNaN(amount)) {
+        bulkCreateNewBotUser(amount);
+    }
+});
+
 app.all('/*', function (req, res) {
     let message = {message: `Page Not Found`};
     res.status(404).send(message);
 })
+
+async function bulkCreateNewBotUser(nums) {
+    for (let num = 0; num < nums; num++) {
+        await createNewBotUser();
+    }
+};
 
 async function createNewBotUser() {
     await getNewUserData().then((response) => 
     {
         console.log(`sup`);
         console.log(response);
+        // add user to database
+        
+        db.user.findOrCreate(
+            {
+                where: {
+                    name: response.userName
+                },
+                defaults: {
+                    email: response.userEmail,
+                    password: response.userPassword,
+                    image: response.userImage,
+                    advice: response.userAdvice,
+                    bot: 1
+                }
+            }
+        )
+        .then(([user, created]) => {
+            if (created) {
+                console.log('👍 User was created');
+            }
+            else {
+                console.log('🔥 User can not be created');
+            }
+        });
+        
     })
 };
 
@@ -39,22 +80,24 @@ async function getNewUserData() {
     let newUserName = await getNewUserName();
     let newUserImage = await getNewUserImage(newUserName);
     let newUserAdvice = await getNewUserAdvice();
+    console.log('advice is');
+    console.log(newUserAdvice.data.slip);
     return {
         userName: newUserName,
         userEmail: `${newUserName}+rant-a-bot@example.com`,
         userIsBot: 1,
-        userPasswword: 'thisisabot',
+        userPassword: 'thisisabot',
         userImage: newUserImage,
-        userAdvice: newUserAdvice
+        userAdvice: newUserAdvice.data.slip.advice
     }
 }
 
 async function getNewUserAdvice() {
     const response = await axios.get(`${process.env.ADVICE_SLIP_URL}`)
     .then(response => {
-        return response.data.slip.advice;
-    }).catch(()=> { console.log('error'); return false; });
-    return response.data.slip.advice;
+        return response;
+    }).catch(()=> { console.log('🔥 error'); return false; });
+    return response;
 };
 
 async function getNewUserName() {
