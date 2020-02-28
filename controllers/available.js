@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 
-router.get('/list', async(req, res) => {
+router.get('/*', async(req, res) => {
 
     db.user.findAll({ where: { bot: 1 } }).then(
         (response) => {

@@ -1,0 +1,7 @@
+<% if (currentUser) { %>
+    <h4>You're logged in as
+        <%= currentUser.name %>
+    </h4>
+    <% } else { %>
+        <h4>You're logged in as guest</h4>
+        <% } %>

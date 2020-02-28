@@ -14,23 +14,62 @@
     <header>
         <nav class="row deep-purple darken-3">
             <div class="nav-wrapper">
-                <a href="/" class="brand-logo left"><i class="material-icons">home</i>rant-a-bot</a>
-                <ul id="nav-mobile" class="right">
-                    <% if (!currentUser) { %>
-                        <li><a href="#signInModal" class="waves-effect waves-light btn modal-trigger">Sign in</a></li>
-                        <% } else { %>
-                            <li><a href="/auth/logout" class="waves-effect waves-light btn">Sign out</a></li>
-                            <% } %>
-                </ul>
+                <div class="col s12">
+                    <div class="col s4">
+                        <a href="/" class="brand-logo left"><i class="material-icons">home</i>rant-a-bot</a>
+
+                    </div>
+                    <div class="col s4">
+                        <ul id="mod-menu">
+                            <!-- used by chat.js to add a leave button -->
+                        </ul>
+                    </div>
+                    <div class="col s4">
+                        <ul id="nav-mobile" class="right">
+                            <% if (!currentUser) { %>
+                                <li><a href="#signInModal" class="waves-effect waves-light btn modal-trigger">Sign in</a></li>
+                                <% } else { %>
+                                    <li><a href="/auth/logout" class="waves-effect waves-light btn">Sign out</a></li>
+                                    <% } %>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
     <main>
         <div class="container">
             <div class="section">
-                <%= currentUser %>
-                    <%- JSON.stringify(currentUser) %>
-                        <%- body %>
+                <% if (currentUser) { %>
+                    <div class="row">
+                        <div class="col s12">
+                            <ul class="tabs">
+                                <li class="tab col s3"><a href="/profile">Profile</a></li>
+                                <li class="tab col s3"><a class="active" href="/available">Bots</a></li>
+                                <li class="tab col s3"><a href="/faq">FAQ</a></li>
+                            </ul>
+                        </div>
+                        <% } %>
+                            <%- body %>
+                    </div>
+                    <% if (alerts.error) { 
+                    alerts.error.forEach(msg => { %>
+                        <div class="alert red">
+                            <%= msg %>
+                        </div>
+                        <%
+                    })
+                    %>
+                            <%
+                    }
+                    if (alerts.success) {
+                        alerts.success.forEach(msg => { %>
+                                <div class="alert green">
+                                    <%= msg %>
+                                </div>
+                                <%    })
+                    }
+                    %>
             </div>
         </div>
     </main>
@@ -129,7 +168,6 @@
                     <a class="modal-action modal-close waves-effect waves-green btn-flat">Dismiss</a>
                 </div>
                 <div class="col s4 right-align">
-                    <!-- <button type="submit" form="form1" class="modal-action modal-close waves-effect waves-green btn-flat">Submit</button> -->
                     <button class="btn waves-effect waves-light" type="submit" name="action2" form="sign-up-form">Create Account
                     <i class="material-icons right">send</i>
                   </button>

@@ -38,22 +38,15 @@ sessionStore.sync();
 
 app.use(flash());
 
-
-app.use(function(req, res, next) {
-    console.log(`😎`);
-    next();
-});
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function(req, res, next) {
     res.locals.alerts = req.flash();
     res.locals.currentUser = req.user;
-    console.log('🥁');
-    console.log(req.user);
     next();
 });
+
 
 app.ws('/', (ws, req) => {
     clients.set(ws, { client: ws });
@@ -123,8 +116,14 @@ async function getChatMessages(client) {
 app.use('/auth', require('./controllers/auth'));
 app.use('/available', require('./controllers/available'));
 app.use('/chat', require('./controllers/chat'));
+app.use('/home', require('./controllers/home'));
 app.use('/', require('./controllers/home'));
+
 app.get('/*', (req, res) => {
+    res.render('404');
+});
+
+app.post('/*', (req, res) => {
     res.render('404');
 });
 
