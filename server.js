@@ -1,9 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const layouts = require('express-ejs-layouts');
+
+const session = require('express-session');
+const passport = require('./config/ppConfig');
+const flash = require('connect-flash');
+
 const app = express();
 const expressWs = require('express-ws')(app);
 const axios = require('axios');
+
+const helmet = require('helmet');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const db = require('./models');
 
 const clients = new Map();
 
@@ -11,6 +20,40 @@ app.set('view engine', 'ejs');
 app.use(layouts);
 app.use(express.static('static'));
 app.use(express.urlencoded({ extended: false }));
+
+app.use(helmet());
+const sessionStore = new SequelizeStore({
+    db: db.sequelize,
+    expiration: 1800000
+});
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore
+}));
+
+sessionStore.sync();
+
+app.use(flash());
+
+
+app.use(function(req, res, next) {
+    console.log(`😎`);
+    next();
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function(req, res, next) {
+    res.locals.alerts = req.flash();
+    res.locals.currentUser = req.user;
+    console.log('🥁');
+    console.log(req.user);
+    next();
+});
 
 app.ws('/', (ws, req) => {
     clients.set(ws, { client: ws });
@@ -77,6 +120,7 @@ async function getChatMessages(client) {
     return response;
 }
 
+app.use('/auth', require('./controllers/auth'));
 app.use('/available', require('./controllers/available'));
 app.use('/chat', require('./controllers/chat'));
 app.use('/', require('./controllers/home'));

@@ -9,4 +9,12 @@ router.get('/faq', (req, res) => {
     res.render('faq');
 });
 
+router.post('/*', (req, res) => {
+    console.log('posted');
+
+    console.log(req.body);
+
+    res.render('home/home');
+})
+
 module.exports = router;
