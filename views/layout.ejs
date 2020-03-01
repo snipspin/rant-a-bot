@@ -42,12 +42,14 @@
             <div class="section">
                 <% if (currentUser) { %>
                     <div class="row">
-                        <div class="col s12">
-                            <ul class="tabs">
-                                <li class="tab col s3"><a href="/profile">Profile</a></li>
-                                <li class="tab col s3"><a class="active" href="/available">Bots</a></li>
-                                <li class="tab col s3"><a href="/faq">FAQ</a></li>
-                            </ul>
+                        <div class="row">
+                            <div class="col s12">
+                                <ul class="tabs">
+                                    <li class="tab col s3"><a href="/profile">Profile</a></li>
+                                    <li class="tab col s3"><a class="active" href="/available">Bots</a></li>
+                                    <li class="tab col s3"><a href="/faq">FAQ</a></li>
+                                </ul>
+                            </div>
                         </div>
                         <% } %>
                             <%- body %>
@@ -135,20 +137,20 @@
                     <form class="col s12">
                         <div class="row">
                             <div class="input-field col s12">
-                                <input placeholder="User name" name="user_name" id="user_name" type="text" class="validate">
-                                <label for="user_name">User Name</label>
+                                <input placeholder="User name" name="user_name" id="user_name_signup" type="text" class="validate">
+                                <label for="user_name_signup">User Name</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="email" name="email" type="email" class="validate">
-                                <label for="email">Email</label>
+                                <input id="email_signup" name="email" type="email" class="validate">
+                                <label for="email_signup">Email</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="password" name="password" type="password">
-                                <label for="password">Password</label>
+                                <input id="password_signup" name="password" type="password">
+                                <label for="password_signup">Password</label>
                             </div>
                         </div>
                         <div class="row">

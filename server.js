@@ -13,6 +13,7 @@ const axios = require('axios');
 const helmet = require('helmet');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models');
+const chatHistory = require('./controllers/chatHistory');
 
 const clients = new Map();
 
@@ -47,10 +48,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 app.ws('/', (ws, req) => {
     clients.set(ws, { client: ws });
     let client = clients.get(ws);
+    console.log(`🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+    // console.log(req);
+    console.log(req.params);
+    console.log(`🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
     getChatSession().then(
         (response) => {
             client.chats = { location: response, messageEndpoint: '' };
@@ -58,19 +62,34 @@ app.ws('/', (ws, req) => {
     ).then((res) => {
         getChatMessages(clients.get(ws)).then((response) => {
                 client.chats.messageEndpoint = response.data.messages_endpoint;
+                // get last Chat session
+                //getChatRecord
+                console.log(`💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥`);
                 client.client.send(JSON.stringify(response.data));
             })
             .catch((err) => {
+                console.log(`🥳🥳`);
                 console.log(err);
             })
     });
 
     ws.on('message', message => {
-        console.log('Received -', message);
+        console.log(`🥳`);
+        console.log(message);
+        let parsedMessage = JSON.parse(message);
+        console.log('Received -', parsedMessage);
         let client = clients.get(ws);
         if (client) {
-            sendChatMessage(client, message).then((response) => {
+            sendChatMessage(client, parsedMessage.text).then((response) => {
                 getChatMessages(client).then((response) => {
+                    // update chat history
+                    console.log(response.data);
+                    console.log(`🌥🌥🌥🌥🌥`)
+                    console.log(req.user);
+                    if (typeof req.user !== "undefined") {
+                        chatHistory.updateChatRecord(response.data, req.user.id, parsedMessage.bot);
+                    }
+                    console.log(`☔️☔️☔️`)
                     client.client.send(JSON.stringify(response.data));
                 })
             });
@@ -84,6 +103,7 @@ app.ws('/', (ws, req) => {
 });
 
 async function sendChatMessage(client, text) {
+
     try {
         let messageJson = JSON.stringify({ message: text });
         const response = axios({

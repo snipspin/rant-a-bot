@@ -1,14 +1,22 @@
 <div class="row">
-    <% if (currentPartner) { %>
+    <% if (typeof currentPartner!='undefined') { %>
         <h6>Your conversation with
-            <%= currentPartner.name %>
+            <span id="bot-name"><%= currentPartner.name %></span>
         </h6>
         <hr/>
         <% } %>
             <div class="col s12">
                 <form class="form">
                     <div class="msgcontent col s12">
-
+                        <% if (typeof lastChat !== null && lastChat != "" ) { %>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    let data = `<%- lastChat %>`;
+                                    console.log(`Data is not null`);
+                                    formatLastChat(data);
+                                })
+                            </script>
+                            <% } %>
                     </div>
                     <input class="input chat-input col s11" autofocus>
                     <button class="btn-floating waves-effect waves-light deep-purple" type="submit" name="action">

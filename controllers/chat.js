@@ -1,22 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const chatHistory = require('./chatHistory');
 
-router.get('/:name', (req, res) => {
-    console.log(`Someone wants to talk with ${req.params.name}`);
-    // check if name exists
+router.get('/:name', async(req, res) => {
+    // this chat is with a particular bot
+
+    // find the bot in the database
     db.user.findOne({
         where: { name: req.params.name }
-    }).then((response) => {
-        console.log(response);
-        res.render('chat', { currentPartner: response });
+    }).then(async(response) => {
+        // console.log(response);
+        let lastChat = await chatHistory.getChatRecord(req.user.id, response.id);
+        console.log(`🍺`);
+        console.log(lastChat);
+        if (lastChat == null) {
+            res.render('chat', { currentPartner: response, lastChat: "" });
+        } else {
+            res.render('chat', { currentPartner: response, lastChat: lastChat.content });
+        }
     });
-    // render chat with some user information
-
 });
 
 router.get('/*', (req, res) => {
     res.render('chat');
 });
+
+// function updateChatRecord(textObj) {
+//     console.log(textObj);
+// }
 
 module.exports = router;
