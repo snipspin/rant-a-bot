@@ -1,0 +1,34 @@
+<div class="row ">
+    <h4>You're viewing the profile of
+        <%- data.name %>
+    </h4>
+    <div class="col s12">
+        <div class="card">
+            <div class="card-image">
+                <img class="responsive-img" src="<%- data.image %>">
+
+                <span class="card-title black-text">Hi, I'm <%- data.name %></span>
+                <%
+                if (data.bot == 1) {
+                    %>
+                    <a href="/chat/<%= data.name %>" class="btn-floating halfway-fab waves-effect waves-light purple"><i class="material-icons">chat_bubble</i></a>
+
+                    <%
+                }
+                %>
+            </div>
+            <div class="card-content">
+                <div class="icon-block">
+                    <p>
+                        <%- data.advice %>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <p>
+            Joined:
+            <%- data.createdAt %>
+        </p>
+    </div>
+</div>

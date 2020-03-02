@@ -45,7 +45,6 @@ async function bulkCreateNewBotUser(nums) {
 
 async function createNewBotUser() {
     await getNewUserData().then((response) => {
-        console.log(`sup`);
         console.log(response);
         // add user to database
 
@@ -76,7 +75,6 @@ async function getNewUserData() {
     let newUserName = await getNewUserName();
     let newUserImage = await getNewUserImage(newUserName);
     let newUserAdvice = await getNewUserAdvice();
-    console.log('advice is');
     console.log(newUserAdvice.data.slip);
     return {
         userName: newUserName,

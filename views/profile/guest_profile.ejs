@@ -1,0 +1,46 @@
+<div class="row">
+    <form action="/auth/signup" method="post" name="sign-up" id="profile_sign-up-form">
+        <div class="modal-content">
+            <h4>Hello guest, please sign up for the complete ranting experience!</h4>
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input placeholder="User name" name="user_name" id="profile_user_name_signup" type="text" class="validate">
+                            <label for="profile_user_name_signup">User Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="profile_email_signup" name="email" type="email" class="validate">
+                            <label for="profile_email_signup">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="profile_password_signup" name="password" type="password">
+                            <label for="profile_password_signup">Password</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="profile_password_repeat" name="password_repeat" type="password">
+                            <label for="profile_password_repeat">Please repeat your password</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer row">
+            <div class="col s6 left-align">
+                <a href="#signInModal" class="modal-action modal-close waves-effect waves-green btn-flat modal-trigger">Sign in</a>
+            </div>
+
+            <div class="col s6 right-align">
+                <button class="btn waves-effect waves-light" type="submit" name="action2" form="sign-up-form">Create Account
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+        </div>
+    </form>
+</div>

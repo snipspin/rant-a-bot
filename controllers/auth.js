@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
@@ -12,7 +13,9 @@ router.post('/signup', (req, res) => {
         defaults: {
             name: req.body.user_name,
             password: req.body.password,
-            bot: 0
+            bot: 0,
+            image: process.env.USER_STANDARD_IMAGE_URL,
+            advice: ``
         }
     }).then(([user, created]) => {
         if (created) {

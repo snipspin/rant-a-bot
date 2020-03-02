@@ -39,8 +39,16 @@ module.exports = (sequelize, DataTypes) => {
                     let hash = bcrypt.hashSync(createdUser.password, 10);
                     // store the hash as the users password
                     createdUser.password = hash;
-                    // continue to save the user with no errors
-                    //callback(null, createdUser);
+                }
+            },
+            beforeUpdate: (user) => {
+                console.log(user)
+                console.log(user.password);
+                if (user.password) {
+                    // hash the password
+                    let hash = bcrypt.hashSync(user.password, 10);
+                    // store the hash as the users password
+                    user.password = hash;
                 }
             }
         }

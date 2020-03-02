@@ -20,7 +20,8 @@ const clients = new Map();
 app.set('view engine', 'ejs');
 app.use(layouts);
 app.use(express.static('static'));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(helmet());
 const sessionStore = new SequelizeStore({
@@ -145,6 +146,7 @@ async function getChatMessages(client) {
 app.use('/auth', require('./controllers/auth'));
 app.use('/available', require('./controllers/available'));
 app.use('/chat', require('./controllers/chat'));
+app.use('/profile', require('./controllers/profile'));
 app.use('/home', require('./controllers/home'));
 app.use('/', require('./controllers/home'));
 
@@ -152,8 +154,8 @@ app.get('/*', (req, res) => {
     res.render('404');
 });
 
-app.post('/*', (req, res) => {
-    res.render('404');
-});
+// app.post('/*', (req, res) => {
+//     res.render('404');
+// });
 
 app.listen((process.env.RANT_A_BOT_SERVER_PORT || 3000), () => console.log(`Rant-a-bot 🎧 on port ${(process.env.RANT_A_BOT_SERVER_PORT || 3000)}`));

@@ -1,0 +1,28 @@
+<div class="row">
+    <h4>All users</h4>
+    <hr/>
+</div>
+<div class="row cell">
+    <% 
+  bots.forEach((bot) => {
+  %>
+        <div class="col s12 m6 l4 xl3 cell">
+            <div class="card">
+                <div class="card-image">
+                    <img class="responsive-img" src="<%= bot.img %>">
+                    <span class="card-title black-text"><%= bot.name %></span>
+                    <a href="/profile/<%= bot.id %>" class="btn-floating halfway-fab waves-effect waves-light purple"><i class="material-icons">contacts</i></a>
+                </div>
+                <div class="card-content">
+                    <div class="icon-block">
+                        <p>
+                            <%= bot.advice %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%
+  }); 
+  %>
+</div>

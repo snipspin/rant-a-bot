@@ -1,0 +1,98 @@
+<div class="row">
+    <form action="/profile/<%= data.id%>/edit" method="post" id="edit_profile_form" name="edit_profile_form" class="col s12">
+        <div class="row">
+            <div class="input-field col s12">
+                <input placeholder="User Name" name="user_name" id="edit_user_name" type="text" class="validate" value="<%= data.name %>">
+                <label for="first_name">User Name</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="edit_image_url" name="edit_image_url" type="text" class="validate" value="<%= data.image %>">
+                <label for="edit_image_url">Image URL</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="edit_password" name="password" type="password" class="validate">
+                <label for="edit_password">Password</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="edit_password_repeated" name="password_repeated" type="password" class="validate">
+                <label for="edit_password_repeated">Password repeated</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="edit_email" name="email" type="email" class="validate" value="<%= data.email %>">
+                <label for="edit_email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 left-align">
+                <a href="#deleteAccountModal" class="modal-action modal-close waves-effect waves-green btn modal-trigger red"><i class="material-icons right">delete</i>Delete Account</a>
+            </div>
+            <div class="col s6 right-align">
+                <button class="btn waves-effect waves-light" type="submit" name="send" form="edit_profile_form">Save changes
+                <i class="material-icons right">save</i>
+              </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    const edit_profile_form = document.querySelector("#edit_profile_form");
+
+    edit_profile_form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        let request = new XMLHttpRequest();
+        let url = edit_profile_form.attributes.getNamedItem('action').value;
+        let formInputs = edit_profile_form.elements;
+        let updateObject = {};
+
+        for (i = 0; i < formInputs.length - 1; i++) {
+            updateObject[formInputs[i].name] = formInputs[i].value;
+            console.log(formInputs[i].name);
+            console.log(formInputs[i].value);
+        }
+        console.log(updateObject);
+
+        request.open("POST", url, true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onreadystatechange = () => {
+            if (request.readyState === 4 && request.status === 200) {
+                var jsonData = JSON.parse(request.response);
+                console.log(jsonData);
+            }
+        };
+
+        request.send(JSON.stringify(updateObject));
+
+    });
+</script>
+
+<!-- Modal Structure delete acount -->
+<div id="deleteAccountModal" class="modal">
+    <form action="/profile/delete" method="post" name="delete_account" id="delete_account_form">
+        <div class="modal-content">
+            <h4>Delete Account</h4>
+            <div class="row">
+                <p>
+                    Are you sure you want to continue and delete your account and all associated data?
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer row">
+            <div class="col s6 left-align">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat green">No, don't delete my account</a>
+            </div>
+            <div class="col s6 right-align">
+                <button class="btn waves-effect waves-light red" type="submit" name="action2" form="delete_account_form">Yes, please delete my Account
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+        </div>
+    </form>
+</div>
