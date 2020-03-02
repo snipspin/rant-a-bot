@@ -1,5 +1,7 @@
 # rant-a-bot
+
 [ToC]
+
 ## The problem being solved
 You had a bad day and just want to get something off your chest but there’s nobody around who cares to listen?
 
@@ -199,7 +201,9 @@ POST /create/bulk/10
 
 ## Services used
 [To get a bots user image](https://thispersondoesnotexist.com/)
+
 [To get an advice](https://api.adviceslip.com/advice)
+
 [To get a random user name](http://names.drycodes.com/1?nameOptions=all)
 
 # Technologies
@@ -231,3 +235,73 @@ POST /create/bulk/10
 > Store images or transform them with the help of a well documented API
 > 
 
+[express WebSocket chat example](https://github.com/y-temp4/express-ws-chat-sample)
+> Straight forward example of how to use WebSocket with express
+
+[Http status codes](https://restfulapi.net/http-status-codes/)
+> Different informative status codes for a clients request
+
+# Installation
+
+```
+git clone https://github.com/snipspin/rant-a-bot.git
+```
+
+Install dependencies
+```
+npm i
+```
+
+Open config/config.json to modify the databse connection information to fit your setup.
+
+Create the database and initialize it
+
+Update the .env file with your data.
+```
+RANT_A_BOT_SERVER_PORT=3000
+ELIZA_MICROSERVICE_URL=url to eliza microservice
+PORT=3001
+BOT_CREATOR_MICROSERVICE_PORT=3002
+BOT_CREATOR_MICROSERVICE_URL=url goes here
+CLOUDINARY_URL=url goes here
+CLOUDINARY_SECRET=your secret
+CLOUDINARY_API_KEY=your API key
+DRYCODES_URL=http://names.drycodes.com/1?nameOptions=all
+GAN_IMAGE_URL=https://thispersondoesnotexist.com/image
+ADVICE_SLIP_URL=https://api.adviceslip.com/advice
+SESSION_SECRET=some secret text
+USER_STANDARD_IMAGE_URL=url to some default image
+```
+
+```
+createdb rant_a_bot
+
+sequelize db:migrate
+```
+
+Run the servers
+
+```
+node microservices/bot-creator/server.js
+```
+> Run the bot-creator to be able to create new bots
+
+```
+node microservices/eliza/server.js
+```
+> Run the eliza microservice to be able to use the chat properly
+
+```
+node server.js
+```
+> Run server.js which will be the users front door
+
+Post an empty body to the bot-creator service
+
+```
+POST http://your-bot-creator-url/create/bulk/10
+```
+> creates 10 new bot user
+> 
+
+After those steps, rant-a-bot should run on your system.
