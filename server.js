@@ -48,53 +48,62 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+// new incoming connection over web socket
 app.ws('/', (ws, req) => {
+    // store the client
     clients.set(ws, { client: ws });
     let client = clients.get(ws);
-    console.log(`🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-    // console.log(req);
-    console.log(req.params);
-    console.log(`🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-    getChatSession().then(
+    // create a new conversation with a bot
+    createChatSession().then(
         (response) => {
             client.chats = { location: response, messageEndpoint: '' };
         }
     ).then((res) => {
+        // get the latest messages
         getChatMessages(clients.get(ws)).then((response) => {
+                // chatHistory.storeChatRecordFromBot(response.data.messages[response.data.messages.length - 1], req.user.id, parsedMessage.bot);
+
                 client.chats.messageEndpoint = response.data.messages_endpoint;
-                // get last Chat session
-                //getChatRecord
-                console.log(`💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥`);
+                // send the message to the client
                 client.client.send(JSON.stringify(response.data));
             })
             .catch((err) => {
-                console.log(`🥳🥳`);
+                console.log(`🔥`);
                 console.log(err);
             })
     });
 
-    ws.on('message', message => {
-        console.log(`🥳`);
-        console.log(message);
+    // client sent a message
+    ws.on('message', async message => {
         let parsedMessage = JSON.parse(message);
-        console.log('Received -', parsedMessage);
+        // let botId = await chatHistory.getBotData(parsedMessage.bot)
+        // get the clients information from the clients Map
         let client = clients.get(ws);
         if (client) {
+            // send the message to the bot
             sendChatMessage(client, parsedMessage.text).then((response) => {
+                // then get the response from the bot
                 getChatMessages(client).then((response) => {
                     // update chat history
-                    console.log(response.data);
-                    console.log(`🌥🌥🌥🌥🌥`)
-                    console.log(req.user);
-                    if (typeof req.user !== "undefined") {
-                        chatHistory.updateChatRecord(response.data, req.user.id, parsedMessage.bot);
+                    if (req.user) {
+                        // first store the bots initial message
+                        if (response.data.messages.length == 3) {
+                            chatHistory.storeChatRecordFromBot(response.data.messages[0].text, req.user.id, parsedMessage.bot, response.data.messages[0].timestamp);
+                        }
+                        chatHistory.storeChatRecordFromUser(parsedMessage.text, req.user.id, parsedMessage.bot, response.data.messages[response.data.messages.length - 2].timestamp);
+                        chatHistory.storeChatRecordFromBot(response.data.messages[response.data.messages.length - 1].text, req.user.id, parsedMessage.bot, response.data.messages[response.data.messages.length - 1].timestamp);
                     }
-                    console.log(`☔️☔️☔️`)
                     client.client.send(JSON.stringify(response.data));
-                })
+                }).catch((err) => {
+                    console.log(`🔥`);
+                    console.log(err);
+                });
+            }).catch((err) => {
+                console.log(`🔥`);
+                console.log(err);
             });
         }
-
     });
 
     ws.on('close', () => {
@@ -105,7 +114,7 @@ app.ws('/', (ws, req) => {
 async function sendChatMessage(client, text) {
 
     try {
-        let messageJson = JSON.stringify({ message: text });
+        //let messageJson = JSON.stringify({ message: text });
         const response = axios({
             method: 'post',
             url: `${process.env.ELIZA_MICROSERVICE_URL}${client.chats.messageEndpoint}`,
@@ -119,7 +128,7 @@ async function sendChatMessage(client, text) {
     }
 }
 
-async function getChatSession() {
+async function createChatSession() {
     try {
         const response = await axios.post(`${process.env.ELIZA_MICROSERVICE_URL}/v1/conversations`);
         return response.headers.location;

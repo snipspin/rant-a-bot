@@ -1,51 +1,61 @@
 const db = require('../models');
+const { Op } = require("sequelize");
 
-async function getChatRecord(userId, botId) {
-    //let botId = getBotData(bot);
-    console.log(`Bot id: ${botId}`);
-    return await db.chat.findOne({
-        where: {
-            humanId: userId,
-            botId: botId
-        }
+async function storeChatRecordFromBot(text, userId, botName, timestamp) {
+    getBotData(botName)
+        .then((data) => {
+            writeChatRecord(data.id, userId, text, timestamp)
+                .catch((err) => {
+                    console.log(`🔥 error inserting chat history: `)
+                    console.log(err);
+                });
+        }).catch((err) => {
+            console.log(`🔥failed to write chat record from bot`);
+            console.log(err);
+        })
+}
+
+async function writeChatRecord(sender, receiver, content, timestamp) {
+    db.message.create({
+        sender: sender,
+        receiver: receiver,
+        content: content,
+        timestamp: timestamp
+    }).catch((err) => {
+        console.log(`🔥 Error storing chat record: ${err}`);
+        console.log(err);
     });
 }
 
-async function updateChatRecord(text, userId, bot) {
-    console.log(`Update chat record between: ${userId} and: ${bot}`);
-    console.log(text);
-    let botId = -1;
-    let contentJSON = JSON.stringify(text);
+async function storeChatRecordFromUser(text, userId, botName, timestamp) {
+    getBotData(botName).then((data) => writeChatRecord(userId, data.id, text, timestamp))
+        .catch((err) => {
+            console.log(`🔥 error inserting chat history: `)
+            console.log(err);
+        });
 
-    let botData = await getBotData(bot).then((response) => {
-        botId = response.id;
-        db.chat.findOrCreate({
-                where: {
-                    humanId: userId,
-                    botId: botId
+}
+
+async function getChatHistory(botName, userId) {
+    let botData = await getBotData(botName);
+    return db.message.findAll({
+        limit: 50,
+        order: [
+            ['timestamp']
+        ],
+        where: {
+            [Op.or]: [{
+                    receiver: botData.id,
+                    sender: userId
                 },
-                defaults: {
-                    content: contentJSON
+                {
+                    receiver: userId,
+                    sender: botData.id
                 }
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-            .then(([chat, created]) => {
-                if (!created) {
-                    db.chat.update({
-                        content: contentJSON
-                    }, {
-                        where: {
-                            humanId: userId,
-                            botId: botId
-                        }
-                    })
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-    });
+            ]
+        }
+    })
+
 }
 
 async function getBotData(bot) {
@@ -57,5 +67,7 @@ async function getBotData(bot) {
     });
 }
 
-module.exports.updateChatRecord = updateChatRecord;
-module.exports.getChatRecord = getChatRecord;
+module.exports.getBotData = getBotData;
+module.exports.storeChatRecordFromBot = storeChatRecordFromBot;
+module.exports.storeChatRecordFromUser = storeChatRecordFromUser;
+module.exports.getChatHistory = getChatHistory;
